@@ -6,7 +6,7 @@ import { readLogRepository } from '../../src/repositories/readLog.repository';
 jest.mock('../../src/repositories/article.repository');
 jest.mock('../../src/repositories/readLog.repository');
 jest.mock('../../src/services/readTracking.service', () => ({ recordReadAsync: jest.fn() }));
-jest.mock('jsonwebtoken', () => ({ verify: jest.fn((_t: string, _s: string) => ({ sub: 'author-1', role: 'author' })) });
+jest.mock('jsonwebtoken', () => ({ verify: jest.fn((_t: string, _s: string) => ({ sub: 'author-1', role: 'author' })) }));
 
 const mockArticleRepo = articleRepository as jest.Mocked<typeof articleRepository>;
 const mockReadLogRepo = readLogRepository as jest.Mocked<typeof readLogRepository>;
@@ -80,7 +80,8 @@ expect(res.body.Errors?.[0]).toMatch(/no longer available/);
     });
 
     it('returns 201 when author creates article', async () => {
-      mockArticleRepo.create.mockResolvedValue(validArticle as any);
+      const created = { ...validArticle, Title: 'New Article', Status: 'Draft' as const };
+      mockArticleRepo.create.mockResolvedValue(created as any);
 
       const res = await request(app)
         .post('/api/articles')

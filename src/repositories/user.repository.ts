@@ -1,7 +1,10 @@
 import { User, IUser } from '../entities/User';
 
+/** Data required to create a user; _id is optional (defaults in schema). */
+export type CreateUserData = Omit<IUser, 'createdAt' | 'updatedAt' | '_id'> & { _id?: string };
+
 export const userRepository = {
-  async create(data: Omit<IUser, 'createdAt' | 'updatedAt'>): Promise<IUser> {
+  async create(data: CreateUserData): Promise<IUser> {
     const user = new User(data);
     return user.save();
   },

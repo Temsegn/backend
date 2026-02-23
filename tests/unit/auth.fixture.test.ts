@@ -48,7 +48,7 @@ describe('Auth API with fixture data', () => {
     expect(res.status).toBe(200);
     assertBaseResponse(res.body);
     expect(res.body.Object).toHaveProperty('token');
-    expect(res.body.Object.user).toMatchObject({ Email: user.Email });
+    expect((res.body.Object as { user: { Email: string } }).user).toMatchObject({ Email: user.Email });
   });
 
   it('login returns 401 for non-existent email', async () => {

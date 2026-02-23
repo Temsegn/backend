@@ -46,7 +46,7 @@ export const authService = {
       throw err;
     }
     const payload: JwtPayload = { sub: user.Id, role: user.Role };
-    const token = jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+    const token = jwt.sign(payload, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN } as jwt.SignOptions);
     const { Password: _, ...safe } = user;
     return { token, user: safe as IUser };
   },

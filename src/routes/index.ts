@@ -26,6 +26,15 @@ router.post('/auth/login', validate(loginValidation), authController.login);
 // Public news feed – only published, not deleted; paginated; category, author, q
 router.get('/articles', validate(listArticlesValidation), articleController.listPublicArticles);
 
+// Author-only: list my articles (must be before /articles/:id so "me" is not captured as id)
+router.get(
+  '/articles/me',
+  authenticate,
+  authorOnly,
+  validate(articlesMeValidation),
+  articleController.listMyArticles
+);
+
 // Single article read – optional auth for ReaderId; records ReadLog; blocks deleted
 router.get(
   '/articles/:id',
@@ -41,13 +50,6 @@ router.post(
   authorOnly,
   validate(createArticleValidation),
   articleController.createArticle
-);
-router.get(
-  '/articles/me',
-  authenticate,
-  authorOnly,
-  validate(articlesMeValidation),
-  articleController.listMyArticles
 );
 router.put(
   '/articles/:id',
